@@ -3,472 +3,530 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin · 谷歌应用广告投放能力测验</title>
+<title>管理后台 · 谷歌应用广告投放能力测验</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="config.js"></script>
 <style>
   :root {
-    --blue: #1a73e8;
-    --blue-light: #e8f0fe;
-    --blue-dark: #0d47a1;
-    --green: #1e8e3e;
-    --green-light: #e6f4ea;
-    --red: #c5221f;
-    --red-light: #fce8e6;
-    --amber: #b06000;
-    --amber-light: #fef3e2;
-    --gray-50: #f8f9fa;
-    --gray-100: #f1f3f4;
-    --gray-200: #e8eaed;
-    --gray-400: #9aa0a6;
-    --gray-600: #5f6368;
-    --gray-800: #3c4043;
-    --gray-900: #202124;
-    --white: #ffffff;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --blue: #1a73e8; --blue-light: #e8f0fe; --blue-dark: #0d47a1;
+    --green: #1e8e3e; --green-light: #e6f4ea;
+    --red: #c5221f; --red-light: #fce8e6;
+    --amber: #b06000; --amber-light: #fef3e2;
+    --gray-50: #f8f9fa; --gray-100: #f1f3f4; --gray-200: #e8eaed;
+    --gray-400: #9aa0a6; --gray-600: #5f6368; --gray-800: #3c4043; --gray-900: #202124;
+    --white: #fff; --radius: 12px; --radius-sm: 8px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--gray-50);
-    color: var(--gray-900);
-    min-height: 100vh;
-  }
+  #page-login { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; }
+  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+  .logo-mark { width: 36px; height: 36px; background: var(--blue); border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+  .logo-mark svg { width: 20px; height: 20px; }
+  .logo-name { font-size: 15px; font-weight: 500; }
+  .login-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 40px; width: 100%; max-width: 400px; }
+  .login-card h2 { font-size: 22px; font-weight: 500; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .login-card p { font-size: 13px; color: var(--gray-600); margin-bottom: 32px; }
+  .form-label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .form-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--gray-900); outline: none; margin-bottom: 16px; transition: border-color 0.15s; }
+  .form-input:focus { border-color: var(--blue); }
+  .btn-login { width: 100%; padding: 13px; background: var(--blue); color: white; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .btn-login:hover { background: var(--blue-dark); }
+  .error-msg { font-size: 13px; color: var(--red); margin-top: 12px; display: none; text-align: center; }
 
-  header {
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-200);
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  #page-dashboard { display: none; }
 
+  header { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 10; }
   .header-left { display: flex; align-items: center; gap: 12px; }
+  .h-logo { display: flex; align-items: center; gap: 10px; }
+  .h-logo-mark { width: 28px; height: 28px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+  .h-logo-mark svg { width: 16px; height: 16px; }
+  .h-logo-text { font-size: 14px; font-weight: 500; }
+  .h-badge { font-size: 11px; font-family: 'DM Mono', monospace; background: var(--gray-100); color: var(--gray-600); padding: 3px 8px; border-radius: 4px; }
 
-  .logo-mark {
-    width: 28px; height: 28px;
-    background: var(--blue);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-  }
+  .tabs { display: flex; align-items: center; gap: 2px; margin-left: 20px; }
+  .tab-btn { padding: 6px 16px; border-radius: 6px; border: none; background: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--gray-600); cursor: pointer; transition: all 0.15s; }
+  .tab-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+  .tab-btn.active { background: var(--blue-light); color: var(--blue); }
 
-  .logo-mark svg { width: 16px; height: 16px; }
+  .btn-logout { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--gray-200); background: var(--white); font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--gray-600); cursor: pointer; }
+  .btn-logout:hover { border-color: var(--gray-400); }
 
-  .logo-text { font-size: 14px; font-weight: 500; }
-  .admin-badge {
-    font-size: 11px;
-    font-family: 'DM Mono', monospace;
-    background: var(--gray-100);
-    color: var(--gray-600);
-    padding: 3px 8px;
-    border-radius: 4px;
-    letter-spacing: 0.04em;
-  }
+  .panel { display: none; padding: 32px; }
+  .panel.active { display: block; }
 
-  .btn-logout {
-    font-size: 13px;
-    color: var(--gray-600);
-    background: none;
-    border: 1px solid var(--gray-200);
-    border-radius: 6px;
-    padding: 6px 14px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-  }
+  .panel-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+  .panel-title { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+  .panel-sub { font-size: 13px; color: var(--gray-600); margin-top: 3px; }
+  .panel-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-  .btn-logout:hover { background: var(--gray-50); }
+  select { padding: 8px 14px; border: 1px solid var(--gray-200); border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; background: var(--white); outline: none; cursor: pointer; color: var(--gray-900); }
 
-  .screen { display: none; }
-  .screen.active { display: block; }
+  .btn-action { padding: 8px 16px; border-radius: 6px; border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-blue:hover { background: var(--blue-dark); }
+  .btn-outline { background: var(--white); color: var(--gray-800); border: 1px solid var(--gray-200); }
+  .btn-outline:hover { border-color: var(--gray-400); }
 
-  /* LOGIN */
-  #screen-login {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 61px);
-    padding: 40px 24px;
-  }
-
-  .login-card {
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 40px;
-    width: 100%;
-    max-width: 380px;
-  }
-
-  .login-card h2 { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
-  .login-card p { font-size: 13px; color: var(--gray-600); margin-bottom: 28px; }
-
-  label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-800); margin-bottom: 6px; }
-
-  input[type="password"], input[type="text"], input[type="email"] {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--gray-900);
-    outline: none;
-    margin-bottom: 16px;
-    transition: border-color 0.15s;
-  }
-
-  input:focus { border-color: var(--blue); }
-
-  .btn-primary {
-    width: 100%;
-    padding: 12px;
-    background: var(--blue);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-  }
-
-  .btn-primary:hover { background: var(--blue-dark); }
-  .error-msg { font-size: 13px; color: var(--red); margin-top: 10px; display: none; }
-
-  /* DASHBOARD */
-  #screen-dash { padding: 32px; }
-
-  .dash-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 28px;
-  }
-
-  .dash-title { font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
-  .dash-sub { font-size: 13px; color: var(--gray-600); margin-top: 3px; }
-
-  .btn-refresh {
-    font-size: 13px;
-    color: var(--blue);
-    background: var(--blue-light);
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-  }
-
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-
-  .stat-card {
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 20px 22px;
-  }
-
-  .stat-label { font-size: 12px; color: var(--gray-600); margin-bottom: 8px; font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
-  .stat-value { font-size: 28px; font-weight: 300; letter-spacing: -0.02em; }
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stats-row-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stat-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 18px 20px; }
+  .stat-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--gray-600); margin-bottom: 8px; letter-spacing: 0.04em; }
+  .stat-value { font-size: 26px; font-weight: 300; letter-spacing: -0.02em; }
   .stat-sub { font-size: 12px; color: var(--gray-400); margin-top: 4px; }
+  .stat-trend { font-size: 12px; font-weight: 500; margin-top: 4px; }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--red); }
+  .trend-same { color: var(--gray-400); }
 
-  .filters {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
-    align-items: center;
-  }
-
-  .filter-btn {
-    padding: 6px 14px;
-    border-radius: 99px;
-    border: 1px solid var(--gray-200);
-    background: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    color: var(--gray-800);
-    transition: all 0.15s;
-  }
-
+  .filters { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
+  .filter-btn { padding: 5px 14px; border-radius: 99px; border: 1px solid var(--gray-200); background: var(--white); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--gray-800); transition: all 0.15s; }
   .filter-btn.active { background: var(--gray-900); color: white; border-color: var(--gray-900); }
   .filter-btn:hover:not(.active) { border-color: var(--gray-400); }
+  .search-box { margin-left: auto; padding: 7px 12px; border: 1px solid var(--gray-200); border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; width: 200px; }
+  .search-box:focus { border-color: var(--blue); }
 
-  .search-input {
-    margin-left: auto;
-    padding: 7px 14px;
-    border: 1px solid var(--gray-200);
-    border-radius: 6px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    outline: none;
-    width: 200px;
-    margin-bottom: 0;
-  }
-
-  .search-input:focus { border-color: var(--blue); }
-
-  .table-wrap {
-    background: var(--white);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
+  .table-wrap { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; margin-bottom: 24px; }
   table { width: 100%; border-collapse: collapse; }
-
-  th {
-    font-size: 11px;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.06em;
-    color: var(--gray-400);
-    text-transform: uppercase;
-    padding: 14px 18px;
-    text-align: left;
-    border-bottom: 1px solid var(--gray-100);
-    background: var(--gray-50);
-  }
-
-  td {
-    padding: 14px 18px;
-    font-size: 13px;
-    color: var(--gray-800);
-    border-bottom: 1px solid var(--gray-100);
-    vertical-align: middle;
-  }
-
+  th { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; color: var(--gray-400); text-transform: uppercase; padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--gray-100); background: var(--gray-50); }
+  td { padding: 13px 16px; font-size: 13px; color: var(--gray-800); border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--gray-50); }
 
-  .level-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 99px;
-    font-size: 12px;
-    font-weight: 500;
-    font-family: 'DM Mono', monospace;
-  }
-
+  .level-badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; font-family: 'DM Mono', monospace; }
   .badge-A { background: var(--green-light); color: var(--green); }
   .badge-B { background: var(--blue-light); color: var(--blue); }
   .badge-C { background: var(--amber-light); color: var(--amber); }
 
-  .topic-pill {
-    display: inline-block;
-    font-size: 11px;
-    padding: 2px 7px;
-    border-radius: 4px;
-    background: var(--red-light);
-    color: var(--red);
-    margin: 2px 2px 2px 0;
-  }
+  .change-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+  .change-up { background: var(--green-light); color: var(--green); }
+  .change-down { background: var(--red-light); color: var(--red); }
+  .change-same { background: var(--gray-100); color: var(--gray-600); }
+  .change-new { background: var(--blue-light); color: var(--blue); }
+  .swag-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: var(--amber-light); color: var(--amber); padding: 3px 8px; border-radius: 4px; font-weight: 500; }
+  .topic-pill { display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 4px; background: var(--red-light); color: var(--red); margin: 2px 2px 2px 0; }
+  .bar-wrap { width: 100%; background: var(--gray-100); border-radius: 99px; height: 6px; margin-top: 4px; }
+  .bar-fill { height: 6px; border-radius: 99px; }
 
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--gray-400);
-    font-size: 14px;
-  }
+  .company-banner { background: var(--blue-light); border: 1px solid #c5d8fb; border-radius: var(--radius-sm); padding: 10px 16px; margin-bottom: 20px; font-size: 13px; color: var(--blue-dark); display: none; align-items: center; justify-content: space-between; }
+  .company-banner.show { display: flex; }
 
-  .loading { text-align: center; padding: 40px; color: var(--gray-400); font-size: 14px; }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .weak-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .weak-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 14px 16px; }
+  .weak-topic { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .weak-count { font-size: 12px; color: var(--gray-600); margin-bottom: 8px; }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-400); font-size: 14px; }
+  .loading-state { text-align: center; padding: 40px; color: var(--gray-400); font-size: 14px; }
+
+  #pdf-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 40px; }
+  #pdf-overlay.show { display: flex; }
+  .pdf-card { background: var(--white); border-radius: var(--radius); width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; }
+  .pdf-header { padding: 18px 24px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--white); z-index: 1; }
+  .pdf-header h3 { font-size: 15px; font-weight: 500; }
+  .pdf-body { padding: 32px; }
+  .btn-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--gray-600); line-height: 1; }
+
+  .rpt-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 2px solid var(--blue); }
+  .rpt-title { font-size: 22px; font-weight: 300; letter-spacing: -0.02em; }
+  .rpt-title strong { font-weight: 500; }
+  .rpt-meta { font-size: 12px; color: var(--gray-600); text-align: right; line-height: 1.9; }
+  .rpt-company-tag { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 99px; margin-top: 6px; }
+  .rpt-summary { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+  .rpt-stat { background: var(--gray-50); border-radius: 8px; padding: 14px; text-align: center; }
+  .rpt-stat-val { font-size: 26px; font-weight: 300; letter-spacing: -0.02em; }
+  .rpt-stat-label { font-size: 11px; color: var(--gray-600); margin-top: 4px; line-height: 1.4; }
+  .rpt-section-title { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 10px; margin-top: 22px; }
+  .rpt-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rpt-table th { text-align: left; padding: 8px 10px; font-size: 11px; color: var(--gray-400); border-bottom: 1px solid var(--gray-200); font-weight: 400; }
+  .rpt-table td { padding: 10px; border-bottom: 1px solid var(--gray-100); }
+  .rpt-footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--gray-200); font-size: 11px; color: var(--gray-400); display: flex; justify-content: space-between; }
+
+  @media print {
+    #page-login, #page-dashboard > header, .panel, #pdf-overlay .pdf-header { display: none !important; }
+    #pdf-overlay { position: static !important; background: none !important; padding: 0 !important; display: block !important; }
+    .pdf-card { box-shadow: none !important; border-radius: 0 !important; max-height: none !important; }
+    .pdf-body { padding: 24px !important; }
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-left">
-    <div class="logo-mark">
-      <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5"/><path d="M8 4.5v3.5l2 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </div>
-    <span class="logo-text">谷歌应用广告投放能力测验</span>
-    <span class="admin-badge">管理后台</span>
-  </div>
-  <button class="btn-logout" id="btn-logout" style="display:none">退出登录</button>
-</header>
-
 <!-- LOGIN -->
-<div class="screen active" id="screen-login">
+<div id="page-login">
+  <div class="login-logo">
+    <div class="logo-mark"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.5"/><path d="M10 6v4.5l2.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    <span class="logo-name">谷歌应用广告投放能力测验</span>
+  </div>
   <div class="login-card">
     <h2>管理员登录</h2>
     <p>仅供内部团队使用</p>
-    <label>密码</label>
-    <input type="password" id="admin-pw" placeholder="输入管理员密码">
-    <button class="btn-primary" id="btn-login">登录</button>
+    <label class="form-label">密码</label>
+    <input type="password" class="form-input" id="admin-pw" placeholder="输入管理员密码">
+    <button class="btn-login" id="btn-login">登录</button>
     <div class="error-msg" id="login-error">密码错误，请重试</div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
-<div class="screen" id="screen-dash">
-  <div class="dash-top">
-    <div>
-      <div class="dash-title">应用广告投放能力测验记录</div>
-      <div class="dash-sub" id="last-updated">正在加载数据...</div>
+<div id="page-dashboard">
+  <header>
+    <div class="header-left">
+      <div class="h-logo">
+        <div class="h-logo-mark"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5"/><path d="M8 4.5v3.5l2 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <span class="h-logo-text">谷歌应用广告投放能力测验</span>
+      </div>
+      <span class="h-badge">管理后台</span>
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-data" onclick="switchTab('data')">数据后台</button>
+        <button class="tab-btn" id="tab-report" onclick="switchTab('report')">月度报告</button>
+      </div>
     </div>
-    <button class="btn-refresh" id="btn-refresh">刷新数据</button>
+    <button class="btn-logout" id="btn-logout">退出登录</button>
+  </header>
+
+  <!-- DATA PANEL -->
+  <div class="panel active" id="panel-data">
+    <div class="panel-top">
+      <div>
+        <div class="panel-title">测验记录</div>
+        <div class="panel-sub" id="data-updated">正在加载...</div>
+      </div>
+      <div class="panel-actions">
+        <button class="btn-action btn-outline" id="btn-refresh">刷新</button>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">总参与</div><div class="stat-value" id="d-total">—</div><div class="stat-sub">累计完成测验</div></div>
+      <div class="stat-card"><div class="stat-label">A Level</div><div class="stat-value" id="d-a" style="color:var(--green)">—</div><div class="stat-sub">进阶投手</div></div>
+      <div class="stat-card"><div class="stat-label">B Level</div><div class="stat-value" id="d-b" style="color:var(--blue)">—</div><div class="stat-sub">成长中</div></div>
+      <div class="stat-card"><div class="stat-label">C Level</div><div class="stat-value" id="d-c" style="color:var(--amber)">—</div><div class="stat-sub">基础阶段</div></div>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">全部</button>
+      <button class="filter-btn" data-filter="A">A Level</button>
+      <button class="filter-btn" data-filter="B">B Level</button>
+      <button class="filter-btn" data-filter="C">C Level</button>
+      <input type="text" class="search-box" id="data-search" placeholder="搜索公司或邮箱...">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>公司</th><th>联系人</th><th>邮箱</th><th>成绩</th><th>等级</th><th>薄弱环节</th><th>完成时间</th></tr></thead>
+        <tbody id="data-tbody"><tr><td colspan="7" class="loading-state">正在加载...</td></tr></tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-label">总参与客户</div>
-      <div class="stat-value" id="stat-total">—</div>
-      <div class="stat-sub">累计完成测验</div>
+  <!-- REPORT PANEL -->
+  <div class="panel" id="panel-report">
+    <div class="panel-top">
+      <div>
+        <div class="panel-title">月度投放能力报告</div>
+        <div class="panel-sub" id="report-period">正在加载...</div>
+      </div>
+      <div class="panel-actions">
+        <select id="company-select"><option value="all">全部公司</option></select>
+        <select id="month-select"></select>
+        <button class="btn-action btn-outline" id="btn-refresh-report">刷新</button>
+        <button class="btn-action btn-blue" id="btn-preview-pdf">预览 PDF</button>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">A Level</div>
-      <div class="stat-value" id="stat-a" style="color:var(--green)">—</div>
-      <div class="stat-sub">进阶投手</div>
+    <div class="company-banner" id="company-banner">
+      <span id="company-banner-text"></span>
+      <button onclick="document.getElementById('company-select').value='all';renderReport();" style="background:none;border:none;color:var(--blue);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">查看全部 ✕</button>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">B Level</div>
-      <div class="stat-value" id="stat-b" style="color:var(--blue)">—</div>
-      <div class="stat-sub">成长中</div>
+    <div class="stats-row-5">
+      <div class="stat-card"><div class="stat-label">本月参与</div><div class="stat-value" id="r-total">—</div><div class="stat-sub">客户投手</div></div>
+      <div class="stat-card"><div class="stat-label">平均分</div><div class="stat-value" id="r-avg">—</div><div class="stat-trend" id="r-trend"></div></div>
+      <div class="stat-card"><div class="stat-label">A Level</div><div class="stat-value" id="r-a" style="color:var(--green)">—</div><div class="stat-sub">进阶投手</div></div>
+      <div class="stat-card"><div class="stat-label">有进步</div><div class="stat-value" id="r-improved" style="color:var(--blue)">—</div><div class="stat-sub">较上月提升</div></div>
+      <div class="stat-card"><div class="stat-label">待发 Swag</div><div class="stat-value" id="r-swag" style="color:var(--amber)">—</div><div class="stat-sub">符合激励条件</div></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">C Level</div>
-      <div class="stat-value" id="stat-c" style="color:var(--amber)">—</div>
-      <div class="stat-sub">基础阶段</div>
+    <div class="section-title"><span>投手成绩明细</span><span style="font-size:12px;color:var(--gray-400);font-weight:400">按本月成绩排序</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>公司</th><th>投手</th><th>本月成绩</th><th>等级</th><th>较上月</th><th>薄弱环节</th><th>激励</th><th>时间</th></tr></thead>
+        <tbody id="report-tbody"><tr><td colspan="8" class="loading-state">正在加载...</td></tr></tbody>
+      </table>
     </div>
+    <div class="section-title"><span id="weak-title">全体薄弱环节 Top 6</span></div>
+    <div class="weak-grid" id="weak-grid"></div>
   </div>
+</div>
 
-  <div class="filters">
-    <button class="filter-btn active" data-filter="all">全部</button>
-    <button class="filter-btn" data-filter="A">A Level</button>
-    <button class="filter-btn" data-filter="B">B Level</button>
-    <button class="filter-btn" data-filter="C">C Level</button>
-    <input type="text" class="search-input" id="search-input" placeholder="搜索公司或邮箱...">
-  </div>
-
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>公司</th>
-          <th>联系人</th>
-          <th>邮箱</th>
-          <th>成绩</th>
-          <th>等级</th>
-          <th>薄弱环节</th>
-          <th>完成时间</th>
-        </tr>
-      </thead>
-      <tbody id="table-body">
-        <tr><td colspan="7" class="loading">正在加载...</td></tr>
-      </tbody>
-    </table>
+<!-- PDF -->
+<div id="pdf-overlay">
+  <div class="pdf-card">
+    <div class="pdf-header">
+      <h3>月度报告预览</h3>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn-action btn-blue" onclick="window.print()">下载 PDF</button>
+        <button class="btn-close" id="btn-close-pdf">✕</button>
+      </div>
+    </div>
+    <div class="pdf-body" id="pdf-body"></div>
   </div>
 </div>
 
 <script>
-// SUPABASE_URL, SUPABASE_KEY, ADMIN_PASSWORD 从 config.js 读取
+let allData = [], currentMonthData = [], prevMonthData = [];
+let selectedMonth = '', selectedCompany = 'all', activeFilter = 'all';
 
-let allData = [];
-let activeFilter = 'all';
-
-function show(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
+// AUTH
 document.getElementById('btn-login').onclick = () => {
-  const pw = document.getElementById('admin-pw').value;
-  if (pw === ADMIN_PASSWORD) {
-    show('screen-dash');
-    document.getElementById('btn-logout').style.display = 'block';
+  if (document.getElementById('admin-pw').value === ADMIN_PASSWORD) {
+    document.getElementById('page-login').style.display = 'none';
+    document.getElementById('page-dashboard').style.display = 'block';
     loadData();
   } else {
     document.getElementById('login-error').style.display = 'block';
   }
 };
-
-document.getElementById('admin-pw').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('btn-login').click();
-});
-
+document.getElementById('admin-pw').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('btn-login').click(); });
 document.getElementById('btn-logout').onclick = () => {
-  show('screen-login');
-  document.getElementById('btn-logout').style.display = 'none';
+  document.getElementById('page-dashboard').style.display = 'none';
+  document.getElementById('page-login').style.display = 'flex';
   document.getElementById('admin-pw').value = '';
+  document.getElementById('login-error').style.display = 'none';
 };
 
+// TABS
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+// DATA LOAD
+async function loadData() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/quiz_results?select=*&order=completed_at.desc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    allData = await res.json();
+    renderDataPanel();
+    buildReportSelects();
+    renderReport();
+    document.getElementById('data-updated').textContent = `最后更新：${new Date().toLocaleString('zh-CN')}`;
+  } catch(e) {
+    document.getElementById('data-tbody').innerHTML = '<tr><td colspan="7" class="empty-state">加载失败，请检查配置</td></tr>';
+  }
+}
 document.getElementById('btn-refresh').onclick = loadData;
+document.getElementById('btn-refresh-report').onclick = loadData;
+
+// DATA PANEL
+function renderDataPanel() {
+  document.getElementById('d-total').textContent = allData.length;
+  document.getElementById('d-a').textContent = allData.filter(r=>getGrade(r.percentage)==='A').length;
+  document.getElementById('d-b').textContent = allData.filter(r=>getGrade(r.percentage)==='B').length;
+  document.getElementById('d-c').textContent = allData.filter(r=>getGrade(r.percentage)==='C').length;
+  renderDataTable();
+}
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.onclick = () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     activeFilter = btn.dataset.filter;
-    renderTable();
+    renderDataTable();
   };
 });
+document.getElementById('data-search').oninput = renderDataTable;
 
-document.getElementById('search-input').oninput = renderTable;
-
-async function loadData() {
-  document.getElementById('table-body').innerHTML = '<tr><td colspan="7" class="loading">正在加载...</td></tr>';
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/quiz_results?select=*&order=completed_at.desc`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    });
-    allData = await res.json();
-    updateStats();
-    renderTable();
-    document.getElementById('last-updated').textContent = `最后更新：${new Date().toLocaleString('zh-CN')}`;
-  } catch(e) {
-    document.getElementById('table-body').innerHTML = '<tr><td colspan="7" class="empty-state">加载失败，请检查 Supabase 配置</td></tr>';
-  }
-}
-
-function updateStats() {
-  document.getElementById('stat-total').textContent = allData.length;
-  document.getElementById('stat-a').textContent = allData.filter(r => r.level === 'A').length;
-  document.getElementById('stat-b').textContent = allData.filter(r => r.level === 'B').length;
-  document.getElementById('stat-c').textContent = allData.filter(r => r.level === 'C').length;
-}
-
-function renderTable() {
-  const search = document.getElementById('search-input').value.toLowerCase();
-  let filtered = allData;
-  if (activeFilter !== 'all') filtered = filtered.filter(r => r.level === activeFilter);
-  if (search) filtered = filtered.filter(r =>
-    (r.company||'').toLowerCase().includes(search) ||
-    (r.email||'').toLowerCase().includes(search) ||
-    (r.name||'').toLowerCase().includes(search)
-  );
-
-  const tbody = document.getElementById('table-body');
-  if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">暂无符合条件的记录</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = filtered.map(r => {
-    const badgeClass = `badge-${r.level}`;
-    const wrongPills = (r.wrong_topics || []).map(t => `<span class="topic-pill">${t}</span>`).join('');
-    const date = new Date(r.completed_at).toLocaleString('zh-CN', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' });
+function renderDataTable() {
+  const search = document.getElementById('data-search').value.toLowerCase();
+  let data = allData;
+  if (activeFilter !== 'all') data = data.filter(r=>getGrade(r.percentage)===activeFilter);
+  if (search) data = data.filter(r=>(r.company||'').toLowerCase().includes(search)||(r.email||'').toLowerCase().includes(search)||(r.name||'').toLowerCase().includes(search));
+  const tbody = document.getElementById('data-tbody');
+  if (!data.length) { tbody.innerHTML='<tr><td colspan="7" class="empty-state">暂无记录</td></tr>'; return; }
+  tbody.innerHTML = data.map(r => {
+    const grade = getGrade(r.percentage);
+    const wrongPills = (r.wrong_topics||[]).map(t=>`<span class="topic-pill">${t}</span>`).join('');
+    const date = new Date(r.completed_at).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
     return `<tr>
-      <td><strong>${r.company || '—'}</strong></td>
-      <td>${r.name || '—'}</td>
-      <td style="color:var(--gray-600)">${r.email || '—'}</td>
-      <td><strong>${r.score}/${r.total}</strong> <span style="color:var(--gray-400);font-size:12px">${r.percentage}%</span></td>
-      <td><span class="level-badge ${badgeClass}">${r.level}</span></td>
-      <td>${wrongPills || '<span style="color:var(--gray-400);font-size:12px">全部答对</span>'}</td>
-      <td style="color:var(--gray-400);font-family:DM Mono,monospace;font-size:12px">${date}</td>
+      <td><strong>${r.company||'—'}</strong></td>
+      <td>${r.name||'—'}</td>
+      <td style="color:var(--gray-600)">${r.email||'—'}</td>
+      <td><strong>${r.percentage}%</strong> <span style="color:var(--gray-400);font-size:12px">${r.score}/${r.total}</span></td>
+      <td><span class="level-badge badge-${grade}">${grade}</span></td>
+      <td>${wrongPills||'<span style="color:var(--gray-400);font-size:12px">—</span>'}</td>
+      <td style="color:var(--gray-400);font-family:'DM Mono',monospace;font-size:12px">${date}</td>
     </tr>`;
   }).join('');
+}
+
+// REPORT PANEL
+function buildReportSelects() {
+  const months = [...new Set(allData.map(r=>r.completed_at.slice(0,7)))].sort().reverse();
+  const mSel = document.getElementById('month-select');
+  mSel.innerHTML = months.map(m=>`<option value="${m}">${formatMonth(m)}</option>`).join('');
+  if (!selectedMonth||!months.includes(selectedMonth)) selectedMonth = months[0]||'';
+  mSel.value = selectedMonth;
+  mSel.onchange = () => { selectedMonth = mSel.value; renderReport(); };
+  const companies = [...new Set(allData.map(r=>r.company).filter(Boolean))].sort();
+  const cSel = document.getElementById('company-select');
+  cSel.innerHTML = '<option value="all">全部公司</option>' + companies.map(c=>`<option value="${c}">${c}</option>`).join('');
+  cSel.value = selectedCompany;
+  cSel.onchange = () => { selectedCompany = cSel.value; renderReport(); };
+}
+
+function renderReport() {
+  if (!selectedMonth) return;
+  selectedCompany = document.getElementById('company-select').value;
+  const prev = getPrevMonth(selectedMonth);
+  currentMonthData = filterByCompany(bestPerEmail(getMonthData(selectedMonth)));
+  prevMonthData = filterByCompany(bestPerEmail(getMonthData(prev)));
+
+  const banner = document.getElementById('company-banner');
+  if (selectedCompany !== 'all') {
+    banner.className = 'company-banner show';
+    document.getElementById('company-banner-text').textContent = `正在查看：${selectedCompany} · ${formatMonth(selectedMonth)}`;
+    document.getElementById('weak-title').textContent = `${selectedCompany} 薄弱环节`;
+  } else {
+    banner.className = 'company-banner';
+    document.getElementById('weak-title').textContent = '全体薄弱环节 Top 6';
+  }
+
+  const total = currentMonthData.length;
+  document.getElementById('report-period').textContent = selectedCompany==='all' ? `${formatMonth(selectedMonth)} · ${total} 人参与` : `${selectedCompany} · ${formatMonth(selectedMonth)} · ${total} 人参与`;
+
+  const avg = total ? Math.round(currentMonthData.reduce((s,r)=>s+r.percentage,0)/total) : 0;
+  const prevAvg = prevMonthData.length ? Math.round(prevMonthData.reduce((s,r)=>s+r.percentage,0)/prevMonthData.length) : null;
+  const aCount = currentMonthData.filter(r=>r.percentage>=84).length;
+  let improved=0, swagCount=0;
+  currentMonthData.forEach(r => { const p=prevMonthData.find(x=>x.email===r.email); if(p&&r.percentage>p.percentage)improved++; if(shouldSwag(r,p))swagCount++; });
+
+  document.getElementById('r-total').textContent = total;
+  document.getElementById('r-avg').textContent = avg + '%';
+  document.getElementById('r-a').textContent = aCount;
+  document.getElementById('r-improved').textContent = improved;
+  document.getElementById('r-swag').textContent = swagCount;
+
+  if (prevAvg !== null) {
+    const diff = avg - prevAvg;
+    const el = document.getElementById('r-trend');
+    if (diff>0) { el.className='stat-trend trend-up'; el.textContent=`↑ 较上月 +${diff}%`; }
+    else if (diff<0) { el.className='stat-trend trend-down'; el.textContent=`↓ 较上月 ${diff}%`; }
+    else { el.className='stat-trend trend-same'; el.textContent='与上月持平'; }
+  }
+
+  const sorted = [...currentMonthData].sort((a,b)=>b.percentage-a.percentage);
+  const tbody = document.getElementById('report-tbody');
+  if (!sorted.length) { tbody.innerHTML='<tr><td colspan="8" class="empty-state">本月暂无记录</td></tr>'; return; }
+  tbody.innerHTML = sorted.map(r => {
+    const p = prevMonthData.find(x=>x.email===r.email);
+    const grade = getGrade(r.percentage);
+    const change = p ? r.percentage-p.percentage : null;
+    let pill;
+    if (change===null) pill=`<span class="change-pill change-new">首次</span>`;
+    else if (change>0) pill=`<span class="change-pill change-up">↑ +${change}%</span>`;
+    else if (change<0) pill=`<span class="change-pill change-down">↓ ${change}%</span>`;
+    else pill=`<span class="change-pill change-same">持平</span>`;
+    const wrongPills = (r.wrong_topics||[]).slice(0,2).map(t=>`<span class="topic-pill">${t}</span>`).join('');
+    const swag = shouldSwag(r,p)?`<span class="swag-tag">🎁 发Swag</span>`:'—';
+    const barColor = r.percentage>=84?'var(--green)':r.percentage>=50?'var(--blue)':'var(--amber)';
+    const date = new Date(r.completed_at).toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'});
+    return `<tr>
+      <td><strong>${r.company||'—'}</strong></td>
+      <td>${r.name||r.email}</td>
+      <td><strong>${r.percentage}%</strong><div class="bar-wrap"><div class="bar-fill" style="width:${r.percentage}%;background:${barColor}"></div></div></td>
+      <td><span class="level-badge badge-${grade}">${grade}</span></td>
+      <td>${pill}</td>
+      <td>${wrongPills||'<span style="color:var(--gray-400);font-size:12px">—</span>'}</td>
+      <td>${swag}</td>
+      <td style="color:var(--gray-400);font-size:12px">${date}</td>
+    </tr>`;
+  }).join('');
+
+  const topicCount = {};
+  currentMonthData.forEach(r=>(r.wrong_topics||[]).forEach(t=>{topicCount[t]=(topicCount[t]||0)+1;}));
+  const sortedTopics = Object.entries(topicCount).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxCount = sortedTopics[0]?.[1]||1;
+  const weakGrid = document.getElementById('weak-grid');
+  if (!sortedTopics.length) { weakGrid.innerHTML='<div style="color:var(--gray-400);font-size:13px;grid-column:span 3">暂无薄弱环节数据</div>'; return; }
+  weakGrid.innerHTML = sortedTopics.map(([topic,count])=>`
+    <div class="weak-card">
+      <div class="weak-topic">${topic}</div>
+      <div class="weak-count">${count} 人答错（占 ${Math.round(count/total*100)}%）</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(count/maxCount*100)}%;background:var(--red)"></div></div>
+    </div>`).join('');
+}
+
+// PDF
+document.getElementById('btn-preview-pdf').onclick = () => { renderPDF(); document.getElementById('pdf-overlay').classList.add('show'); };
+document.getElementById('btn-close-pdf').onclick = () => document.getElementById('pdf-overlay').classList.remove('show');
+
+function renderPDF() {
+  const month = formatMonth(selectedMonth);
+  const company = selectedCompany==='all'?null:selectedCompany;
+  const total = currentMonthData.length;
+  const avg = total ? Math.round(currentMonthData.reduce((s,r)=>s+r.percentage,0)/total) : 0;
+  const aCount = currentMonthData.filter(r=>r.percentage>=84).length;
+  const bCount = currentMonthData.filter(r=>r.percentage>=50&&r.percentage<84).length;
+  const cCount = currentMonthData.filter(r=>r.percentage<50).length;
+  const prevAvg = prevMonthData.length ? Math.round(prevMonthData.reduce((s,r)=>s+r.percentage,0)/prevMonthData.length) : null;
+  const avgChange = prevAvg!==null ? avg-prevAvg : null;
+  const sorted = [...currentMonthData].sort((a,b)=>b.percentage-a.percentage);
+  const topicCount = {};
+  currentMonthData.forEach(r=>(r.wrong_topics||[]).forEach(t=>{topicCount[t]=(topicCount[t]||0)+1;}));
+  const topTopics = Object.entries(topicCount).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([t])=>t);
+
+  document.getElementById('pdf-body').innerHTML = `
+    <div class="rpt-header">
+      <div>
+        <div style="font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--blue);text-transform:uppercase;margin-bottom:8px">谷歌应用广告投放能力测验</div>
+        <div class="rpt-title"><strong>月度投放能力报告</strong></div>
+        <div style="font-size:14px;color:var(--gray-600);margin-top:4px">${month}</div>
+        ${company?`<div class="rpt-company-tag">${company}</div>`:''}
+      </div>
+      <div class="rpt-meta">由 Google 出品<br>生成时间：${new Date().toLocaleDateString('zh-CN')}<br>数据周期：${month}<br>${company?`客户：${company}`:'全部客户'}</div>
+    </div>
+    <div class="rpt-summary">
+      <div class="rpt-stat"><div class="rpt-stat-val">${total}</div><div class="rpt-stat-label">参与投手</div></div>
+      <div class="rpt-stat"><div class="rpt-stat-val" style="color:${avgChange>0?'var(--green)':avgChange<0?'var(--red)':'inherit'}">${avg}%</div><div class="rpt-stat-label">平均答对率${avgChange!==null?`<br>${avgChange>0?'+':''}${avgChange}% vs 上月`:''}</div></div>
+      <div class="rpt-stat"><div class="rpt-stat-val" style="color:var(--green)">${aCount}</div><div class="rpt-stat-label">A Level 投手</div></div>
+      <div class="rpt-stat"><div class="rpt-stat-val" style="font-size:15px;color:var(--amber);padding-top:6px">${topTopics[0]||'—'}</div><div class="rpt-stat-label">最大薄弱环节</div></div>
+    </div>
+    <div class="rpt-section-title">等级分布</div>
+    <div style="display:flex;gap:10px;margin-bottom:22px">
+      <div style="flex:${aCount||0.1};background:var(--green-light);border-radius:6px;padding:12px;text-align:center;min-width:60px"><div style="font-size:20px;font-weight:300;color:var(--green)">${aCount}</div><div style="font-size:11px;color:var(--green);margin-top:2px">A Level</div></div>
+      <div style="flex:${bCount||0.1};background:var(--blue-light);border-radius:6px;padding:12px;text-align:center;min-width:60px"><div style="font-size:20px;font-weight:300;color:var(--blue)">${bCount}</div><div style="font-size:11px;color:var(--blue);margin-top:2px">B Level</div></div>
+      <div style="flex:${cCount||0.1};background:var(--amber-light);border-radius:6px;padding:12px;text-align:center;min-width:60px"><div style="font-size:20px;font-weight:300;color:var(--amber)">${cCount}</div><div style="font-size:11px;color:var(--amber);margin-top:2px">C Level</div></div>
+    </div>
+    <div class="rpt-section-title">投手成绩明细</div>
+    <table class="rpt-table">
+      <thead><tr><th>公司</th><th>投手</th><th>本月成绩</th><th>等级</th><th>较上月</th><th>薄弱环节</th></tr></thead>
+      <tbody>${sorted.map(r=>{
+        const p=prevMonthData.find(x=>x.email===r.email);
+        const grade=getGrade(r.percentage);
+        const change=p?r.percentage-p.percentage:null;
+        const changeStr=change===null?'首次参与':change>0?`↑ +${change}%`:change<0?`↓ ${change}%`:'持平';
+        const changeColor=change===null?'var(--blue)':change>0?'var(--green)':change<0?'var(--red)':'var(--gray-400)';
+        const gradeColor=grade==='A'?'var(--green)':grade==='B'?'var(--blue)':'var(--amber)';
+        return `<tr><td>${r.company||'—'}</td><td>${shouldSwag(r,p)?'🎁 ':''}${r.name||r.email}</td><td><strong>${r.percentage}%</strong></td><td style="color:${gradeColor};font-weight:500">${grade}</td><td style="color:${changeColor}">${changeStr}</td><td style="color:var(--gray-600)">${(r.wrong_topics||[]).slice(0,2).join('、')||'—'}</td></tr>`;
+      }).join('')}</tbody>
+    </table>
+    ${topTopics.length?`<div class="rpt-section-title">本月培训建议</div><div style="background:var(--gray-50);border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.8;color:var(--gray-800)">${company?company+'的':'本月参与测验的'}投手薄弱环节集中在：<strong>${topTopics.join('、')}</strong>。建议在下次沟通中重点覆盖这些领域。</div>`:''}
+    <div class="rpt-footer"><span>谷歌应用广告投放能力测验 · 内部使用</span><span>${company||'全部客户'} · ${month}</span></div>
+  `;
+}
+
+// HELPERS
+function getGrade(pct) { return pct>=84?'A':pct>=50?'B':'C'; }
+function formatMonth(m) { const [y,mo]=m.split('-'); return `${y}年${parseInt(mo)}月`; }
+function getMonthData(month) { return allData.filter(r=>r.completed_at.slice(0,7)===month); }
+function getPrevMonth(month) { const [y,m]=month.split('-').map(Number); return m===1?`${y-1}-12`:`${y}-${String(m-1).padStart(2,'0')}`; }
+function bestPerEmail(data) { const map={}; data.forEach(r=>{if(!map[r.email]||r.percentage>map[r.email].percentage)map[r.email]=r;}); return Object.values(map); }
+function filterByCompany(data) { return selectedCompany==='all'?data:data.filter(r=>r.company===selectedCompany); }
+function shouldSwag(curr,prev) {
+  const cG=getGrade(curr.percentage);
+  if(!prev) return cG==='A';
+  const pG=getGrade(prev.percentage);
+  return curr.percentage-prev.percentage>=20||(pG==='C'&&cG!=='C')||(pG==='B'&&cG==='A');
 }
 </script>
 </body>
